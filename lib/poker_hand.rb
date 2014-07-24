@@ -39,17 +39,20 @@ def poker_hand (your_hand)
     end
   end
 
-  # loop through number array to check if royal
+  # loop through number array to check if royal or straight
+  # also create count array that counts number of cards with each card number
   is_royal = false
   is_straight = false
   index = hand_numbers[0]
+  count_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   hand_numbers.each do |number|
+    count_array[number] += 1
     if number == index
-      index+=1
+      index += 1
     end
   end
 
-  if index == hand_numbers[0] + 5
+  if index == (hand_numbers[0] + 5)
     is_straight = true
     if index == 15
       is_royal = true
@@ -65,13 +68,42 @@ def poker_hand (your_hand)
   elsif is_straight
     return "straight"
   else
-    return "nothing"
+    # loop through count array to check for 4 of a kind, full house, 3 of a kind, 2 pair or pair
+    number_pairs = 0
+    count_array.each do |count|
+      puts "count in first each loop = " + count.to_s
+      if count == 2
+        number_pairs += 1
+      end
+    end
+    index = 0
+    count_array.each do |count|
+      puts "count in second each loop = " + count.to_s
+      if count == 4
+        return "four of a kind"
+      elsif count == 3
+        if number_pairs == 1
+          return "full house"
+        else
+          return "three of a kind"
+        end
+      elsif index == 14
+        if number_pairs == 2
+          return "two pairs"
+        elsif number_pairs == 1
+          return "pair"
+        else index == 14
+          return "nothing"
+        end
+      else
+        index += 1
+      end
+    end
   end
 
-  # hand_numbers.sort.each do |number|
-  #   if
-  # puts "numbers = " + hand_numbers.sort.to_s
-  # puts "suits = " + hand_suits.sort.to_s
 end
 
-# poker_hand(['9C', '10C', 'JC', 'QC', 'KC'])
+# poker_hand(['3C', '2S','2D', '2C', '2H'])
+# poker_hand(['3C', '3S','4D', '4C', '4H'])
+# poker_hand(['3C', '6S','4D', '4C', '4H'])
+# poker_hand(['3C', "2S",'4D', '5C', '7H'])
